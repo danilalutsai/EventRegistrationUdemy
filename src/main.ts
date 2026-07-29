@@ -1,6 +1,7 @@
-import { createApp } from 'vue'
-import './style.css'
+import { createApp } from 'vue';
+import './style.css';
 
-import EventRegistration from './EventRegistration.vue'
+import App from './App.vue';
 
-createApp(EventRegistration).mount('#app')
+createApp(App).mount('#app')
+

@@ -21,6 +21,7 @@ function submit(): void {
   newDate.value = "";
   newDescription.value = "";
 }
+
 </script>
 
 <template>
@@ -34,25 +35,25 @@ function submit(): void {
             type="text"
             name="title"
             placeholder="Add event title"
-            class="min-w-0 flex-1 rounded-md border border-gray-300 bg-white px-3 py-2 focus:border-blue-500 focus:outline-none"
+            class="w-full min-w-0 sm:w-auto sm:flex-1 rounded-md border border-gray-300 bg-white px-3 py-2 focus:border-blue-500 focus:outline-none"
           >
           <input
             v-model="newDate"
             type="date"
             placeholder="Add event date"
             name="when"
-            class="w-44 shrink-0 rounded-md border border-gray-300 bg-white px-3 py-2 focus:border-blue-500 focus:outline-none"
+            class="w-full shrink-0 sm:w-44 rounded-md border border-gray-300 bg-white px-3 py-2 focus:border-blue-500 focus:outline-none"
           >
           <input
             v-model="newDescription"
             type="text"
             name="description"
             placeholder="Add event description"
-            class="min-w-0 flex-[2] rounded-md border border-gray-300 bg-white px-3 py-2 focus:border-blue-500 focus:outline-none"
+            class="w-full min-w-0 sm:w-auto sm:flex-[2] rounded-md border border-gray-300 bg-white px-3 py-2 focus:border-blue-500 focus:outline-none"
           >
           <button
             type="submit"
-            class="shrink-0 cursor-pointer rounded-md border border-blue-600 bg-blue-600 px-5 py-2 font-medium text-white transition duration-100 ease-in-out hover:border-blue-700 hover:bg-blue-700 active:translate-y-px"
+            class="w-full shrink-0 sm:w-auto cursor-pointer rounded-md border border-blue-600 bg-blue-600 px-5 py-2 font-medium text-white transition duration-100 ease-in-out hover:border-blue-700 hover:bg-blue-700 active:translate-y-px"
           >
             Add
           </button>

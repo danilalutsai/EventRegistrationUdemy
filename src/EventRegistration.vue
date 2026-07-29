@@ -1,50 +1,40 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
 import EventCard from './components/EventCard.vue';
+import LoadingEventCard from './components/LoadingEventCard.vue';
 import BookingCard from './components/BookingCard.vue';
 import AddBooking from './components/AddBooking.vue';
 
 import type { EventItem, EventDetails } from './EventTypes';
 
+const events = ref<EventItem[]>([]);
 const bookings = ref<EventItem[]>([]);
 
-let eventsDetails: EventDetails[] = ([
-  {
-    title: "Rails conference 2024",
-    when: "2024-04-20",
-    description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, ",
-  },
-  {
-    title: "Vue presentation 2026",
-    when: "2026-07-25",
-    description: "Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. ",
-  },
-  {
-    title: "TypeScript conference 2020",
-    when: "2020-01-18",
-    description: "It was popularised thanks to these sheets and more recently with desktop publishing software like Aldus PageMaker and Microsoft Word including versions of Lorem Ipsum.",
-  },
-  {
-    title: "JavaScript presentation 2022",
-    when: "2022-02-28",
-    description: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum",
-  },
-  {
-    title: "Python Crash Course 2023",
-    when: "2023-04-18",
-    description: "Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of de Finibus Bonorum et Malorum (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, Lorem ipsum dolor sit amet.., comes from a line in section 1.10.32.",
-  },
-  {
-    title: "Rust Mega Course 2026",
-    when: "2026-12-08",
-    description: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. ",
-  },
-]);
+const eventsLoading = ref(false);
 
-const events = ref<EventItem[]>(
-  eventsDetails.map((details, index) => ({ id: index + 1, ...details }))
-);
+async function fetchEvents(): Promise<void> {
+  eventsLoading.value = true;
+
+  try {
+    const response = await fetch('http://localhost:3001/events');
+
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    events.value = await response.json();
+
+  } catch (error) {
+    console.log(`Somethig went wrong ${error}`)
+
+  } finally {
+    eventsLoading.value = false;
+  }
+}
+
+// We only start fetching data after our whole app mounts(loads) so we use onMounted
+onMounted(() => {
+  fetchEvents();
+});
+
 
 function addEvent(details: EventDetails): void {
   events.value.push({ id: events.value.length + 1, ...details });
@@ -63,26 +53,30 @@ function deleteEvent(id: number) {
 function cancelBooking(id: number): void {
   bookings.value = bookings.value.filter(b => b.id !== id);
 }
-
 </script>
 
 <template>
   <div class="min-h-screen">
     <main class="container mx-auto my-8 space-y-8 px-4">
       <h1 class="text-4xl font-medium pl-5">Event booking App</h1>
-      <h2 class="text-2xl font-medium pl-5">All Events</h2>
-      <p v-if="events.length === 0" class="text-gray-500 ml-5">No events yet.</p>
-      <section class="grid grid-cols-2 justify-items-center gap-8">
-        <EventCard 
-          v-for="event in events" 
-          :key="event.id" 
-          :id="event.id" 
-          :title="event.title" 
-          :when="event.when" 
-          :description="event.description" 
-          @register="bookEvent(event)";
+      <p v-if="!eventsLoading && events.length === 0" class="text-gray-500 ml-5">No events yet.</p>
+      <!-- One column by default, two once there's room for both cards. -->
+      <!-- Skeletons live in the same grid so nothing shifts when data lands. -->
+      <section class="grid grid-cols-1 md:grid-cols-2 justify-items-center gap-8">
+        <template v-if="eventsLoading">
+          <LoadingEventCard v-for="i in 4" :key="`skeleton-${i}`" />
+        </template>
+
+        <EventCard
+          v-else
+          v-for="event in events"
+          :key="event.id"
+          :title="event.title"
+          :when="event.when"
+          :description="event.description"
+          @register="bookEvent(event)"
           @delete="deleteEvent(event.id)"
-          " />
+        />
       </section>
         <AddBooking @add="addEvent" />
       <h2 class="text-2xl font-medium pl-5">Your bookings</h2>
