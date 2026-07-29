@@ -4,7 +4,7 @@ import type { EventDetails } from '../EventTypes';
 
 const emit = defineEmits<{ add: [details: EventDetails] }>();
 
-const newTitle = ref("");
+const newTitle = ref<string>("");
 const newDate = ref("");
 const newDescription = ref("");
 

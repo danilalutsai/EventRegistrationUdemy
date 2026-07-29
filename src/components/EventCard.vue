@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BaseCard from './BaseCard.vue';
 import ButtonEvent from './ButtonEvent.vue';
-import type { EventDetails } from '../EventTypes';
+import type { EventDetails } from '../Types.ts';
 
 defineProps<EventDetails>();
 defineEmits(['register', 'delete']);

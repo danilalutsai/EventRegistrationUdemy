@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { EventDetails } from '../EventTypes';
+import type { EventDetails } from '../Types.ts';
 import BaseCard from './BaseCard.vue';
 
 defineProps<Partial<EventDetails> & { loading?: boolean }>();
