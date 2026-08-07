@@ -3,6 +3,14 @@ interface Animal {
   eat(): void;
 }
 
+const legs = [12];
+
+function optimistic(): void {
+  for (let i = 0; i < legs.length; i++) {
+    if (i > legs.length) return;
+  }
+}
+
 class Dog implements Animal {
   legs: number;
 

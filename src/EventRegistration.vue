@@ -125,7 +125,7 @@ function addEvent(details: EventDetails): void {
       <!-- Skeletons live in the same grid so nothing shifts when data lands. -->
       <section class="grid grid-cols-1 md:grid-cols-2 justify-items-center gap-8">
         <template v-if="eventsLoading">
-          <LoadingEventCard v-for="i in 4" :key="`skeleton-${i}`" />
+          <LoadingEventCard v-for="event in events" :key="event.id" />
         </template>
 
         <EventCard

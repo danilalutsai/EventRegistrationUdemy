@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import type { EventDetails } from '../EventTypes';
+import type { EventDetails } from '../Types.ts';
 
 const emit = defineEmits<{ add: [details: EventDetails] }>();
 
